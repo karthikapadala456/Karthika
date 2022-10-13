@@ -24,6 +24,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.times;
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
@@ -61,10 +62,20 @@ public class ProductTest {
         Mockito.when(productRepo.findById(id)).thenReturn(Optional.of(product));
         assertEquals(Optional.of(product), productService.getProductById(id));
     }
-
     @Test
     public void updateTest()
     {
+        Product product1=new Product(2L,"Television",60000L,"LG Company");
+     Mockito.when(productRepo.save(product1)).thenReturn(product1);
+     assertEquals(product1,productService.update(product1, product1.getId()));
+    }
+    @Test
+    public void delete()
+    {
+        Product product1=new Product(2L,"Television",60000L,"LG Company");
+        productService.delete(product1.getId());
+        Mockito.verify(productRepo,times(1)).deleteById(product1.getId());
 
     }
+
 }
